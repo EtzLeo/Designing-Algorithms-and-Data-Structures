@@ -22,6 +22,32 @@ namespace Chromatic_number__ind_1._3_
         public bool[,] vertexMatrix;
         public int matrixSize;
 
+        public int FindVertexDegree(int i)//возвращает степень вершины
+        {
+            int degree = 0;
+            for (int j = 0; j < matrixSize; j++)
+            {
+                if (vertexMatrix[i, j])
+                {
+                    degree++;
+                }
+            }
+            return degree;
+        }
+        public int MaxDegreeVertex(int i)//возвращает вершину максимальной степени, смежную с вершиной под номером i
+        {
+            int vertex = 0;
+            int degree = 0;
+            for (int j = 0; j < matrixSize; j++)
+            {
+                if (!vertexMatrix[i, j] && degree < FindVertexDegree(j))
+                {
+                    vertex = j;
+                    degree = FindVertexDegree(j);
+                }
+            }
+            return vertex;
+        }
         public int FindChromaticNumber()
         {
 
