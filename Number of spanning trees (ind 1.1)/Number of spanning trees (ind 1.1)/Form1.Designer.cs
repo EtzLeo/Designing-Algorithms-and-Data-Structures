@@ -37,12 +37,12 @@
             // 
             // button1
             // 
-            this.button1.BackColor = System.Drawing.SystemColors.Control;
+            this.button1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.button1.Font = new System.Drawing.Font("Calibri", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button1.ForeColor = System.Drawing.Color.Black;
-            this.button1.Location = new System.Drawing.Point(245, 593);
+            this.button1.Location = new System.Drawing.Point(250, 585);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(298, 65);
+            this.button1.Size = new System.Drawing.Size(300, 60);
             this.button1.TabIndex = 0;
             this.button1.Text = "Запуск программы";
             this.button1.UseVisualStyleBackColor = false;
@@ -52,7 +52,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Calibri", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(140, 26);
+            this.label1.Location = new System.Drawing.Point(146, 28);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(321, 24);
             this.label1.TabIndex = 1;
@@ -80,8 +80,8 @@
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Font = new System.Drawing.Font("Calibri", 8F);
-            this.richTextBox1.Location = new System.Drawing.Point(144, 62);
+            this.richTextBox1.Font = new System.Drawing.Font("Calibri", 10F);
+            this.richTextBox1.Location = new System.Drawing.Point(150, 55);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.Size = new System.Drawing.Size(500, 500);
             this.richTextBox1.TabIndex = 4;
@@ -91,6 +91,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(778, 744);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.label3);
