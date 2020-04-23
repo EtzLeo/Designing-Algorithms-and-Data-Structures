@@ -48,9 +48,58 @@ namespace Chromatic_number__ind_1._3_
             }
             return vertex;
         }
-        public int FindChromaticNumber()
+        void DeleteRowAndColumn(int i)//удаление вершины
         {
+            bool[,] newMatrix = new bool[matrixSize - 1, matrixSize - 1];
+            int i1 = 0, j1 = 0;
+            for (int k = 0; k < matrixSize; k++)
+            {
+                if (k != i)
+                {
+                    j1 = 0;
+                    for (int j = 0; j < matrixSize; j++)
+                    {
+                        if (j != i)
+                        {
+                            newMatrix[i1, j1] = vertexMatrix[k, j];
+                            j1++;
+                        }
+                    }
+                    i1++;
+                }
+            }
+            vertexMatrix = newMatrix;
+            matrixSize--;
+        }
 
+        void AlterationOfRowsElemets(int i1, int i2)//логическое сложение элементов строк
+        {
+            for (int j = 0; j < matrixSize; j++)
+            {
+                vertexMatrix[i1, j] = vertexMatrix[i1, j] || vertexMatrix[i2, j];
+            }
+            DeleteRowAndColumn(i2);
+        }
+        public int FindChromaticNumber()//поиск хроматического числа
+        {
+            int chrom = 0;
+            for (int i = 0; i < matrixSize; i++)
+            {
+                while (FindVertexDegree(i) != matrixSize)
+                {
+                    AlterationOfRowsElemets(i, MaxDegreeVertex(i));
+                }
+                if (FindVertexDegree(i) == matrixSize)
+                {
+                    DeleteRowAndColumn(i--);
+                    chrom++;
+                }
+            }
+            if (matrixSize == 1)//осталась последняя неокрашенная вершина
+            {
+                return chrom + 1;
+            }
+            else return chrom;
         }
 
         private void button1_Click(object sender, EventArgs e)
