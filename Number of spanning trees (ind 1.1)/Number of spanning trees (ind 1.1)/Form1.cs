@@ -18,10 +18,26 @@ namespace Number_of_spanning_trees__ind_1._1_
             InitializeComponent();
         }
         public int[,] vertexMatrix;
-        public int kirchhoffMatrix;
+        public int[,] kirchhoffMatrix;
         public int matrixSize;
 
-        public void CreateKirchhoffMatrix() { }
+        public void CreateKirchhoffMatrix() 
+        {
+            kirchhoffMatrix = new int[matrixSize, matrixSize];
+            for (int i = 0; i < matrixSize; i++)
+            {
+                int temp = 0;
+                for (int j = 0; j < matrixSize; j++)
+                {
+                    if (vertexMatrix[i, j] == 1)
+                    {
+                        kirchhoffMatrix[i, j] = -1;
+                        temp++;
+                    }
+                }
+                kirchhoffMatrix[i, i] = temp;
+            }
+        }
         public void TransformMatrix() { }
         public int FindDeterminant() { return 0; }
 
