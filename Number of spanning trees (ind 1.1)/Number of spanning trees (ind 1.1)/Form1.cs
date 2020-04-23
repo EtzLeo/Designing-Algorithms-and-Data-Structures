@@ -38,8 +38,37 @@ namespace Number_of_spanning_trees__ind_1._1_
                 kirchhoffMatrix[i, i] = temp;
             }
         }
-        public void TransformMatrix() { }
-        public int FindDeterminant() { return 0; }
+        public void TransformMatrix() 
+        {
+        
+        }
+        public int FindDeterminant(int[,] kirchhoffMatrix, int matrixSize) 
+        {
+            int sum = 0, a = 1;
+            int[,] minor = new int[matrixSize, matrixSize];
+            if (matrixSize > 0)
+            {
+                if (matrixSize == 1)
+                {
+                    return kirchhoffMatrix[0, 0];
+                }
+                if (matrixSize == 2)
+                {
+                    return kirchhoffMatrix[0, 0] * kirchhoffMatrix[1, 1] - kirchhoffMatrix[0, 1] * kirchhoffMatrix[1, 0];
+                }
+                if (matrixSize >= 2)
+                {
+                    for (int i = 0; i < matrixSize; i++)
+                    {
+                        TransformMatrix();
+                        sum += a * kirchhoffMatrix[i, 0] * FindDeterminant(minor, matrixSize - 1);
+                        a = -a;
+                    }
+                }
+            }
+            else return 0;
+            return sum;
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
