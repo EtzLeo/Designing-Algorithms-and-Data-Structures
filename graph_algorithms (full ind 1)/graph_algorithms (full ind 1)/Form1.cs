@@ -96,6 +96,7 @@ namespace graph_algorithms__full_ind_1_
         private void ClearButton_Click(object sender, EventArgs e)
         {
             matrixTextBox.Text = "";
+            resultText.Text = "";
         }
 
         private void ResultButton_Click(object sender, EventArgs e)
@@ -105,7 +106,7 @@ namespace graph_algorithms__full_ind_1_
                 graph.TextboxDataEntry(matrixTextBox, toolStripTextBox1);
             }
 
-            if (!graph.MatrixIsCorrect(matrixTextBox))
+            if (!graph.MatrixIsCorrect(matrixTextBox,toolStripComboBox1))
             {
                 errorProvider.SetIconAlignment(matrixTextBox, ErrorIconAlignment.TopRight);
                 errorProvider.SetIconPadding(matrixTextBox, 5);

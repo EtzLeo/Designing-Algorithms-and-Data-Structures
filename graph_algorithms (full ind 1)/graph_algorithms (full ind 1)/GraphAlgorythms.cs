@@ -22,42 +22,71 @@ namespace graph_algorithms__full_ind_1_
             switch (task.SelectedIndex)
             {
                 case 0:
-                    int[,] kirchhoffMatrix = new int[VertexCount, VertexCount];
-                    CreateKirchhoffMatrix(ref kirchhoffMatrix);
-                    int det = FindDeterminant(kirchhoffMatrix, VertexCount - 1);
-                    resultText.Text = Convert.ToString(det);
-                    DataOutputToFile(resultText);
-                    resultText.Text = resultText.Text.Insert(0, "Число остовных деревьев: ");
+                    NumberOfSpanningTrees(resultText);
                     break;
                 case 1:
-                    bool[] usedVertex = new bool[VertexCount];
-                    List<int> path = new List<int>(VertexCount);
-                    FindHamPath(VertexCount, base.vertexesMatrix, usedVertex, path, resultText);
-                    DataOutputToFile(resultText);
-                    resultText.Text = resultText.Text.Insert(0, "Гамильтонов путь:\n");
+                    HamiltonianPath(resultText);
                     break;
                 case 2:
-                    int chromatic = FindChromaticNumber();
-                    resultText.Text = Convert.ToString(chromatic);
-                    DataOutputToFile(resultText);
-                    resultText.Text = resultText.Text.Insert(0, "Хроматическое число:");
+                    ChromaticNum(resultText);
                     break;
                 case 3:
-                    
+                    LargestEdgeCover(resultText);
                     break;
                 case 4:
-                    int source = AddSource( vertexesMatrix);
-                    int sink = AddSink( vertexesMatrix);
-                    int[,] flowMatrix = new int[VertexCount, VertexCount]; // текущий поток сети
-                    int[] flowInVertex = new int[VertexCount]; // поток из начальной вершины
-                    int[] vertexParent = new int[VertexCount]; // массив предков вершин
-                    bool[] used = new bool[VertexCount];
-                    int maxFlow = MaxFlow(source,sink,used,flowInVertex,vertexParent,vertexesMatrix,flowMatrix);
-                    resultText.Text = Convert.ToString(maxFlow);
-                    DataOutputToFile(resultText);
-                    resultText.Text = resultText.Text.Insert(0, "Максимальный поток: ");
+                    MaxFlow(resultText);
                     break;
             }
+        }
+
+        public void NumberOfSpanningTrees(Label resultText)
+        {
+            int[,] kirchhoffMatrix = new int[VertexCount, VertexCount];
+            CreateKirchhoffMatrix(ref kirchhoffMatrix);
+            int det = FindDeterminant(kirchhoffMatrix, VertexCount - 1);
+            resultText.Text = Convert.ToString(det);
+            DataOutputToFile(resultText);
+            resultText.Text = resultText.Text.Insert(0, "Число остовных деревьев: ");
+        }
+
+        public void HamiltonianPath(Label resultText)
+        {
+            bool[] usedVertex = new bool[VertexCount];
+            List<int> path = new List<int>(VertexCount);
+            FindHamPath(VertexCount, base.vertexesMatrix, usedVertex, path, resultText);
+            DataOutputToFile(resultText);
+            resultText.Text = resultText.Text.Insert(0, "Гамильтонов путь:\n");
+        }
+
+        public void ChromaticNum(Label resultText)
+        {
+            int chromatic = FindChromaticNumber();
+            resultText.Text = Convert.ToString(chromatic);
+            DataOutputToFile(resultText);
+            resultText.Text = resultText.Text.Insert(0, "Хроматическое число: ");
+        }
+
+        public void LargestEdgeCover(Label resultText)
+        {
+            bool[] usedVertex = new bool[VertexCount];
+            FindLargestEdgeCover(usedVertex);
+            OutputLabelResult(resultText);
+            DataOutputToFile(resultText);
+            resultText.Text = resultText.Text.Insert(0, "Наибольшее реберное покрытие:\n");
+        }
+
+        public void MaxFlow(Label resultText)
+        {
+            int source = AddSource(vertexesMatrix);
+            int sink = AddSink(vertexesMatrix);
+            int[,] flowMatrix = new int[VertexCount, VertexCount]; // текущий поток сети
+            int[] flowInVertex = new int[VertexCount]; // поток из начальной вершины
+            int[] vertexParent = new int[VertexCount]; // массив предков вершин
+            bool[] usedVertex = new bool[VertexCount];
+            int maxFlow = FindMaxFlow(source, sink, usedVertex, flowInVertex, vertexParent, vertexesMatrix, flowMatrix);
+            resultText.Text = Convert.ToString(maxFlow);
+            DataOutputToFile(resultText);
+            resultText.Text = resultText.Text.Insert(0, "Максимальный поток: ");
         }
         public void TextboxDataEntry(RichTextBox richTextBox, ToolStripTextBox textBox)
         {
@@ -72,37 +101,68 @@ namespace graph_algorithms__full_ind_1_
             ffstream.Close();
         }
 
-        public bool MatrixIsCorrect(RichTextBox richTextBox)
+        public bool MatrixIsCorrect(RichTextBox richTextBox, ToolStripComboBox task)
         {
             if (richTextBox.Text.Length == 0)
             {
                 return false;
             }
-            for (int i = 0; i < richTextBox.Lines.Length; i++)
-            {
-                if (richTextBox.Text[i] >= '0' && richTextBox.Text[i] <= '9' || richTextBox.Text[i] == ',' || richTextBox.Text[i] == '\n')
-                {
-                    return true;
-                }
-            }
 
-            int check = richTextBox.Lines[0].Length;
-
-            if (check != richTextBox.Lines.Length)
+            if (task.SelectedIndex != 4)
             {
-                return false;
-            }
+                int check = richTextBox.Lines[0].Length;
 
-            for (int i = 0; i < richTextBox.Lines.Length; i++)
-            {
-                if(richTextBox.Lines[i].Length != check)
+                if (check != richTextBox.Lines.Length)
                 {
                     return false;
                 }
+
+                for (int i = 0; i < richTextBox.Lines.Length; i++)
+                {
+                    if (richTextBox.Lines[i].Length != check)
+                    {
+                        return false;
+                    }
+                }
+
+                for (int i = 0; i < richTextBox.Lines.Length; i++)
+                {
+                    if (richTextBox.Text[i] != '0' && richTextBox.Text[i] != '1' && richTextBox.Text[i] != '\n')
+                    {
+                        return false;
+                    }
+                }
             }
-            return false;
-            
+            else
+            {
+                int check = richTextBox.Lines[0].Length + 1;
+                if (check != richTextBox.Lines.Length * 2)
+                {
+                    return false;
+                }
+
+                for (int i = 0; i < richTextBox.Lines.Length; i++)
+                {
+                    if (richTextBox.Lines[i].Length + 1 != check)
+                    {
+                        return false;
+                    }
+                }
+
+                for (int i = 0; i < richTextBox.Lines.Length; i++)
+                {
+                    if (!(richTextBox.Text[i] >= '0' && richTextBox.Text[i] <= '9') && richTextBox.Text[i] != ',' && richTextBox.Text[i] != '\n')
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+
         }
+
+
+        //hamilton
 
         public bool HamiltonPathExistence(int vertex, int matrixSize, int[,] vertexMatrix, bool[] usedVertex, List<int> path)
         {
@@ -221,7 +281,7 @@ namespace graph_algorithms__full_ind_1_
             return sum;
         }
         //chrom
-        public int FindVertexDegree(int i)//возвращает степень вершины
+        public int VertexDegree(int i)//возвращает степень вершины
         {
             int degree = 0;
             for (int j = 0; j < VertexCount; j++)
@@ -239,10 +299,10 @@ namespace graph_algorithms__full_ind_1_
             int degree = 0;
             for (int j = 0; j < VertexCount; j++)
             {
-                if (vertexesMatrix[i, j] == 0 && degree < FindVertexDegree(j))
+                if (vertexesMatrix[i, j] == 0 && degree < VertexDegree(j))
                 {
                     vertex = j;
-                    degree = FindVertexDegree(j);
+                    degree = VertexDegree(j);
                 }
             }
             return vertex;
@@ -284,11 +344,11 @@ namespace graph_algorithms__full_ind_1_
             int chrom = 0;
             for (int i = 0; i < VertexCount; i++)
             {
-                while (FindVertexDegree(i) != VertexCount)
+                while (VertexDegree(i) != VertexCount)
                 {
                     AlterationOfRowsElemets(i, MaxDegreeVertex(i));
                 }
-                if (FindVertexDegree(i) == VertexCount)
+                if (VertexDegree(i) == VertexCount)
                 {
                     DeleteVertex(i--);
                     chrom++;
@@ -419,7 +479,7 @@ namespace graph_algorithms__full_ind_1_
 
         // Алгоритм Форда-Фалкерсона
 
-        int MaxFlow(int source, int sink, bool[] used, int[] flowInVertex, int[] vertexParent, int[,] vertexesMatrix, int[,] flowMatrix)
+        int FindMaxFlow(int source, int sink, bool[] used, int[] flowInVertex, int[] vertexParent, int[,] vertexesMatrix, int[,] flowMatrix)
         {
             int u, v, flow = 0;
 
@@ -440,5 +500,79 @@ namespace graph_algorithms__full_ind_1_
             return flow;
         }
 
+
+        //
+
+
+        int VertexNumberOfMinimumDegree(bool[] used)
+        {
+            int min = vertexCount;
+            int num = 0;
+
+            for (int i = 0; i < vertexCount; i++)
+            {
+                if (VertexDegree(i) < min && !used[i])
+                {
+                    min = VertexDegree(i);
+                    num = i;
+                }
+            }
+            return num;
+        }
+
+        int FindMinAdjVertex(int vertex)
+        {
+            int min = vertexCount;
+            int num = -1;
+            for (int i = 0; i < vertexCount; i++)
+            {
+                if (vertexesMatrix[vertex, i] == 1 && VertexDegree(i) < min && VertexDegree(i) > 1)
+                {
+                    min = VertexDegree(i);
+                    num = i;
+                }
+            }
+            return num;
+        }
+        void FindLargestEdgeCover(bool[] used)
+        {
+            int minVertex = VertexNumberOfMinimumDegree( used);
+            int minVertexDegree = VertexDegree(minVertex);
+            int minAdjVert;
+            while (!used[minVertex])
+            {
+                used[minVertex] = true;
+                if (minVertexDegree != 1)
+                {
+                    for (int i = 0; i < minVertexDegree; i++)
+                    {
+                        minAdjVert = FindMinAdjVertex(minVertex);
+
+                        if (minVertexDegree != 1 && minAdjVert != -1)
+                        {
+                            SetEdge(0,minVertex, minAdjVert);
+                            SetEdge(0,minAdjVert, minVertex);
+                            minVertexDegree = VertexDegree(minVertex);
+                        }
+                    }
+                }
+                minVertex = VertexNumberOfMinimumDegree(used);
+                minVertexDegree = VertexDegree(minVertex);
+            }
+
+        }
+        void OutputLabelResult(Label label)
+        {
+            label.Text = "";
+            for (int i = 0; i < vertexCount; i++)
+                for (int j = i; j < vertexCount; j++)
+                {
+                    if (vertexesMatrix[i, j] == 1)
+                    {
+                        label.Text += Convert.ToString(i) + "-" + Convert.ToString(j) + ",";
+                    }
+                }
+            label.Text = label.Text.Remove(label.Text.Length - 1);
+        }
     }
 }

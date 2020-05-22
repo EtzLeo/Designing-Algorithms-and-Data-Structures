@@ -71,6 +71,7 @@ namespace graph_algorithms__full_ind_1_
         {
             vertexesMatrix[str, row] = value;
         }
+
         public void FillMatrix(RichTextBox richTextBox, ToolStripComboBox toolStripComboBox)
         {
             vertexesMatrix = new int[vertexCount, vertexCount];
