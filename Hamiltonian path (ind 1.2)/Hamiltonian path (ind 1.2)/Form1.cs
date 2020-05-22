@@ -24,7 +24,6 @@ namespace Hamiltonian_path__ind_1._2_
         public int matrixSize;
         public List<int> path;
 
-
         public bool HamiltonPathExistence(int vertex)
         {
             path.Add(vertex);
@@ -48,6 +47,7 @@ namespace Hamiltonian_path__ind_1._2_
             usedVertex[vertex] = false;
             return false;
         }
+
         private void button1_Click(object sender, EventArgs e)
         {
             int t = 0;
@@ -76,27 +76,33 @@ namespace Hamiltonian_path__ind_1._2_
                 }
                 t++;
             }
+
             StreamWriter ffstream = new StreamWriter("result.txt", false, System.Text.Encoding.Default);
-
-            if (HamiltonPathExistence(0))
+            bool flag = false;
+            for (int i = 0; i < matrixSize && !flag; i++)
             {
-                foreach (int item in path)
+                if (HamiltonPathExistence(i))
                 {
-                    ffstream.Write(item);
-                    label3.Text += Convert.ToString(item);
-
-                    if (!item.Equals(path.Last()))
+                    foreach (int item in path)
                     {
-                        ffstream.Write("-");
-                        label3.Text += "-";
+                        ffstream.Write(item);
+                        label3.Text += Convert.ToString(item);
+
+                        if (!item.Equals(path.Last()))
+                        {
+                            ffstream.Write("-");
+                            label3.Text += "-";
+                        }
                     }
+                    flag = true;
                 }
             }
-            else
+
+            if (!flag)
             {
                 label3.Text += "Гамильтонова пути не существует.";
                 ffstream.Write("Гамильтонова пути не существует.");
-            } 
+            }
             ffstream.Close();
         }
     }
