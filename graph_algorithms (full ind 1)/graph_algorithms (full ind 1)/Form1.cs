@@ -21,6 +21,8 @@ namespace graph_algorithms__full_ind_1_
             this.StartPosition = FormStartPosition.CenterScreen;
         }
 
+        GraphAlgorythms graph = new GraphAlgorythms();
+
         RichTextBox matrixTextBox = new RichTextBox();
         Label textBoxTitle = new Label();
         Label resultText = new Label();
@@ -98,7 +100,25 @@ namespace graph_algorithms__full_ind_1_
 
         private void ResultButton_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            if (matrixTextBox.Text.Equals("") && !toolStripTextBox1.Text.Equals(""))
+            {
+                graph.TextboxDataEntry(matrixTextBox, toolStripTextBox1);
+            }
+            graph.VertexCount = matrixTextBox.Lines.Length;
+
+            if (!graph.MatrixIsCorrect(matrixTextBox, toolStripComboBox1.SelectedIndex))
+            {
+                errorProvider.SetIconAlignment(matrixTextBox, ErrorIconAlignment.TopRight);
+                errorProvider.SetIconPadding(matrixTextBox, 5);
+                errorProvider.SetError(matrixTextBox, "Данные не введены или введены некорректно");
+                resultText.Text = "";
+            }
+            else
+            {
+                errorProvider.SetError(matrixTextBox, String.Empty);
+                graph.FillMatrix(matrixTextBox, toolStripComboBox1);
+                //
+            }
         }
     }
 }
