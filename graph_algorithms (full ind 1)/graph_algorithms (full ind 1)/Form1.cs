@@ -104,9 +104,8 @@ namespace graph_algorithms__full_ind_1_
             {
                 graph.TextboxDataEntry(matrixTextBox, toolStripTextBox1);
             }
-            graph.VertexCount = matrixTextBox.Lines.Length;
 
-            if (!graph.MatrixIsCorrect(matrixTextBox, toolStripComboBox1.SelectedIndex))
+            if (!graph.MatrixIsCorrect(matrixTextBox))
             {
                 errorProvider.SetIconAlignment(matrixTextBox, ErrorIconAlignment.TopRight);
                 errorProvider.SetIconPadding(matrixTextBox, 5);
@@ -116,9 +115,10 @@ namespace graph_algorithms__full_ind_1_
             else
             {
                 errorProvider.SetError(matrixTextBox, String.Empty);
-                graph.FillMatrix(matrixTextBox, toolStripComboBox1);
-                //
+                graph.VertexCount = matrixTextBox.Lines.Length;
+                graph.TaskSolution(toolStripComboBox1, resultText, matrixTextBox);
             }
+            
         }
     }
 }
