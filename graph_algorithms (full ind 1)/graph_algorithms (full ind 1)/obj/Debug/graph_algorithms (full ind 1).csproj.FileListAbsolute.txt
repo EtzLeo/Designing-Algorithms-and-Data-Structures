@@ -1,0 +1,10 @@
+C:\Users\Leo\Desktop\не открывать\Designing-Algorithms-and-Data-Structures\graph_algorithms (full ind 1)\graph_algorithms (full ind 1)\bin\Debug\graph_algorithms (full ind 1).exe.config
+C:\Users\Leo\Desktop\не открывать\Designing-Algorithms-and-Data-Structures\graph_algorithms (full ind 1)\graph_algorithms (full ind 1)\bin\Debug\graph_algorithms (full ind 1).exe
+C:\Users\Leo\Desktop\не открывать\Designing-Algorithms-and-Data-Structures\graph_algorithms (full ind 1)\graph_algorithms (full ind 1)\bin\Debug\graph_algorithms (full ind 1).pdb
+C:\Users\Leo\Desktop\не открывать\Designing-Algorithms-and-Data-Structures\graph_algorithms (full ind 1)\graph_algorithms (full ind 1)\obj\Debug\graph_algorithms (full ind 1).csprojAssemblyReference.cache
+C:\Users\Leo\Desktop\не открывать\Designing-Algorithms-and-Data-Structures\graph_algorithms (full ind 1)\graph_algorithms (full ind 1)\obj\Debug\graph_algorithms__full_ind_1_.Form1.resources
+C:\Users\Leo\Desktop\не открывать\Designing-Algorithms-and-Data-Structures\graph_algorithms (full ind 1)\graph_algorithms (full ind 1)\obj\Debug\graph_algorithms__full_ind_1_.Properties.Resources.resources
+C:\Users\Leo\Desktop\не открывать\Designing-Algorithms-and-Data-Structures\graph_algorithms (full ind 1)\graph_algorithms (full ind 1)\obj\Debug\graph_algorithms (full ind 1).csproj.GenerateResource.cache
+C:\Users\Leo\Desktop\не открывать\Designing-Algorithms-and-Data-Structures\graph_algorithms (full ind 1)\graph_algorithms (full ind 1)\obj\Debug\graph_algorithms (full ind 1).csproj.CoreCompileInputs.cache
+C:\Users\Leo\Desktop\не открывать\Designing-Algorithms-and-Data-Structures\graph_algorithms (full ind 1)\graph_algorithms (full ind 1)\obj\Debug\graph_algorithms (full ind 1).exe
+C:\Users\Leo\Desktop\не открывать\Designing-Algorithms-and-Data-Structures\graph_algorithms (full ind 1)\graph_algorithms (full ind 1)\obj\Debug\graph_algorithms (full ind 1).pdb
