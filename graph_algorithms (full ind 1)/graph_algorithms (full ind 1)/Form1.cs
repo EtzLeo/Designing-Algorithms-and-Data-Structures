@@ -114,8 +114,7 @@ namespace graph_algorithms__full_ind_1_
             }
             else
             {
-                errorProvider.SetError(matrixTextBox, String.Empty);
-                graph.VertexCount = matrixTextBox.Lines.Length;
+                errorProvider.SetError(matrixTextBox, String.Empty);              
                 graph.TaskSolution(toolStripComboBox1, resultText, matrixTextBox);
             }
             

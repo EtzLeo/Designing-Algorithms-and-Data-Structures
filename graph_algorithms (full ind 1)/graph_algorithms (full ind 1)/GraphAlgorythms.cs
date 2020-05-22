@@ -32,7 +32,7 @@ namespace graph_algorithms__full_ind_1_
                 case 1:
                     bool[] usedVertex = new bool[VertexCount];
                     List<int> path = new List<int>(VertexCount);
-                    FindHamPath(VertexCount, GetMatrix(), usedVertex, path, resultText);
+                    FindHamPath(VertexCount, base.vertexesMatrix, usedVertex, path, resultText);
                     DataOutputToFile(resultText);
                     resultText.Text = resultText.Text.Insert(0, "Гамильтонов путь:\n");
                     break;
@@ -40,13 +40,23 @@ namespace graph_algorithms__full_ind_1_
                     int chromatic = FindChromaticNumber();
                     resultText.Text = Convert.ToString(chromatic);
                     DataOutputToFile(resultText);
-                    resultText.Text = resultText.Text.Insert(0, "Хроматическое число: ");
+                    resultText.Text = resultText.Text.Insert(0, "Хроматическое число:");
                     break;
                 case 3:
+                    
                     break;
                 case 4:
+                    int source = AddSource( vertexesMatrix);
+                    int sink = AddSink( vertexesMatrix);
+                    int[,] flowMatrix = new int[VertexCount, VertexCount]; // текущий поток сети
+                    int[] flowInVertex = new int[VertexCount]; // поток из начальной вершины
+                    int[] vertexParent = new int[VertexCount]; // массив предков вершин
+                    bool[] used = new bool[VertexCount];
+                    int maxFlow = MaxFlow(source,sink,used,flowInVertex,vertexParent,vertexesMatrix,flowMatrix);
+                    resultText.Text = Convert.ToString(maxFlow);
+                    DataOutputToFile(resultText);
+                    resultText.Text = resultText.Text.Insert(0, "Максимальный поток: ");
                     break;
-
             }
         }
         public void TextboxDataEntry(RichTextBox richTextBox, ToolStripTextBox textBox)
@@ -68,6 +78,14 @@ namespace graph_algorithms__full_ind_1_
             {
                 return false;
             }
+            for (int i = 0; i < richTextBox.Lines.Length; i++)
+            {
+                if (richTextBox.Text[i] >= '0' && richTextBox.Text[i] <= '9' || richTextBox.Text[i] == ',' || richTextBox.Text[i] == '\n')
+                {
+                    return true;
+                }
+            }
+
             int check = richTextBox.Lines[0].Length;
 
             if (check != richTextBox.Lines.Length)
@@ -82,15 +100,8 @@ namespace graph_algorithms__full_ind_1_
                     return false;
                 }
             }
-         
-            for (int i = 0; i < richTextBox.Lines.Length; i++)
-            {
-                if (richTextBox.Text[i] >= '0' && richTextBox.Text[i] <= '9' || richTextBox.Text[i] == ',' || richTextBox.Text[i] == '\n')
-                {
-                    return true;
-                }
-            }
             return false;
+            
         }
 
         public bool HamiltonPathExistence(int vertex, int matrixSize, int[,] vertexMatrix, bool[] usedVertex, List<int> path)
@@ -289,5 +300,145 @@ namespace graph_algorithms__full_ind_1_
             }
             else return chrom;
         }
+
+        //max flow
+
+        void SetMasValue(bool[] used, int[] flowInVertex, int[] vertexParent)
+        {
+            for (int i = 1; i < VertexCount; i++)
+            {
+                used[i] = false;
+                flowInVertex[i] = 0;
+                vertexParent[i] = 0;
+            }
+        }
+
+        bool CheckSource(int vert, int[,] vertexesMatrix)
+        {
+            for (int i = 0; i < VertexCount - 1; i++)
+            {
+                if (vertexesMatrix[i, vert] != 0)
+                    return false;
+            }
+            return true;
+        }
+
+        bool CheckSink(int vert, int[,] vertexesMatrix)
+        {
+            for (int j = 0; j < VertexCount - 1; j++)
+            {
+                if (vertexesMatrix[vert, j] != 0)
+                    return false;
+            }
+            return true;
+        }
+
+        int SourceCapacity(int vertex, int[,] tempMatr)
+        {
+            int capacity = 0;
+            for (int j = 0; j < VertexCount; j++)
+            {
+                capacity += tempMatr[vertex, j];
+            }
+            return capacity;
+        }
+        int SinkCapacity(int vertex, int[,] temp)
+        {
+            int capacity = 0;
+            for (int i = 0; i < VertexCount; i++)
+            {
+                capacity += temp[i, vertex];
+            }
+            return capacity;
+        }
+
+        int AddSource(int[,] vertexesMatrix)
+        {
+            int[,] tempMatrix = new int[++VertexCount, VertexCount];
+            int source = VertexCount - 1;
+            for (int i = 0; i < VertexCount - 1; i++)
+            {
+                for (int j = 0; j < VertexCount - 1; j++)
+                {
+                    tempMatrix[i, j] = vertexesMatrix[i, j];
+
+                    if (CheckSource(j, vertexesMatrix))
+                    {
+                        tempMatrix[VertexCount - 1, j] = SourceCapacity(j, tempMatrix);
+                    }
+                }
+            }
+            SetMatrix(tempMatrix);
+            return source;
+        }
+        int AddSink( int[,] vertexesMatrix)
+        {
+            int[,] tempMatrix = new int[++VertexCount, VertexCount];
+            int sink = VertexCount - 1;
+            for (int i = 0; i < VertexCount - 1; i++)
+            {
+                for (int j = 0; j < VertexCount - 1; j++)
+                {
+                    tempMatrix[i, j] = vertexesMatrix[i, j];
+                }
+                if (CheckSink(i, vertexesMatrix))
+                {
+                    tempMatrix[i, VertexCount - 1] = SinkCapacity(i, tempMatrix);
+                }
+
+            }
+            SetMatrix(tempMatrix);
+            return sink;
+        }
+
+
+        bool BFS(int source, int sink, bool[] used, int[] flowInVertex, int[] vertexParent, int[,] capacityMatrix, int[,] flowMatrix)
+        {
+            SetMasValue(used, flowInVertex, vertexParent);
+            Queue<int> Q = new Queue<int>();
+            used[source] = true;
+            vertexParent[source] = source;
+            flowInVertex[source] = int.MaxValue;
+
+            Q.Enqueue(source);
+            while (!used[sink] && Q.Count() != 0)
+            {
+                int u = Q.Peek(); Q.Dequeue();
+                for (int v = 0; v < VertexCount; v++)
+                    if (!used[v] && (capacityMatrix[u, v] - flowMatrix[u, v] > 0))
+                    {
+                        flowInVertex[v] = Math.Min(flowInVertex[u], capacityMatrix[u, v] - flowMatrix[u, v]);
+                        used[v] = true;
+                        vertexParent[v] = u;
+                        Q.Enqueue(v);
+                    }
+            }
+
+            return used[sink];
+        }
+
+        // Алгоритм Форда-Фалкерсона
+
+        int MaxFlow(int source, int sink, bool[] used, int[] flowInVertex, int[] vertexParent, int[,] vertexesMatrix, int[,] flowMatrix)
+        {
+            int u, v, flow = 0;
+
+            while (BFS(source, sink, used, flowInVertex, vertexParent, vertexesMatrix, flowMatrix))
+            {
+                int add = flowInVertex[sink];
+
+                v = sink; u = vertexParent[v];
+                while (v != source)
+                {
+                    flowMatrix[u, v] += add;
+                    flowMatrix[v, u] -= add;
+                    v = u; u = vertexParent[v];
+                }
+                flow += add;
+            }
+
+            return flow;
+        }
+
     }
 }
