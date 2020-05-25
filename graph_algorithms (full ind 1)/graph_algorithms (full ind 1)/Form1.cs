@@ -78,7 +78,7 @@ namespace graph_algorithms__full_ind_1_
                 resultButton.Click += ResultButton_Click;
 
                 toolStripContainer1.ContentPanel.Controls.Add(clearButton);
-                clearButton.Text = "Clear";
+                clearButton.Text = "Очистить";
                 clearButton.Location = new Point(306, 344);
                 clearButton.Size = new Size(110, 35);
                 clearButton.BackColor = Color.IndianRed;

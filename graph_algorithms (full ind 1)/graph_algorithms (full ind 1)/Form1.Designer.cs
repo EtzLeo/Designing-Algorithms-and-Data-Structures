@@ -125,6 +125,8 @@
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.BackColor = System.Drawing.Color.SeaShell;
+            this.errorProvider.SetIconAlignment(this.toolStripContainer1.ContentPanel, System.Windows.Forms.ErrorIconAlignment.TopRight);
+            this.errorProvider.SetIconPadding(this.toolStripContainer1.ContentPanel, 5);
             this.toolStripContainer1.ContentPanel.Margin = new System.Windows.Forms.Padding(4);
             this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(505, 396);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -161,7 +163,7 @@
             this.Font = new System.Drawing.Font("Lato Light", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Задачи на графах";
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.toolStripContainer1.LeftToolStripPanel.ResumeLayout(false);
